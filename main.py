@@ -32,6 +32,16 @@ class QuickReview(BaseModel):
 model = load_model('models/lstm.keras')
 vocab = joblib.load('models/vocab.pkl')
 
+# Server wakeup
+@app.get('/server/wakeup')
+def server_wakeup():
+    try:
+        return {"detail": "Server wokeup."}
+    except Exception as e:
+        print (str(e))
+        raise HTTPException(status_code=500, detail="An error occurred.")
+    
+# Quick Prediction 
 @app.post('/quick/predict')
 def predictPractice(text:QuickReview):
     try:
@@ -48,7 +58,7 @@ def predictPractice(text:QuickReview):
         print(str(e))
         raise HTTPException(status_code=500, detail="An error occurred.")
 
-
+# Batch Prediction
 @app.post('/batch/predict')
 def predict_review(file: UploadFile):
     try:
